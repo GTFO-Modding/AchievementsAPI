@@ -89,7 +89,7 @@ namespace AchievementsAPI
         public static void ActivateTrigger(string id, params object?[] data)
         {
             bool save = false;
-            foreach (var achievement in s_achievements)
+            foreach (AchievementInstance? achievement in s_achievements)
             {
                 achievement.ActivateTrigger(id, data, ref save);
             }
@@ -123,12 +123,12 @@ namespace AchievementsAPI
 
             file.LoadAchievements(s_achievements);
 
-            var registeredAchievements = Registry.Achievements;
+            AchievementRegistry? registeredAchievements = Registry.Achievements;
 
-            foreach (var achievement in registeredAchievements)
+            foreach (AchievementDefinition? achievement in registeredAchievements)
             {
                 bool found = false;
-                foreach (var existingAchievement in s_achievements)
+                foreach (AchievementInstance? existingAchievement in s_achievements)
                 {
                     if (existingAchievement.Definition.ID == achievement.ID)
                     {
@@ -177,7 +177,16 @@ namespace AchievementsAPI
             OnAchievementUnlocked += (achievement) =>
             {
                 L.Debug($"Unlocked achievement '{achievement.Name}' - {achievement.Description}");
-                PlayerManager.GetLocalPlayerAgent().Sound.Post(AK.EVENTS.APEX_PUZZLE_SOLVED);
+                if (achievement.CompletionSound.Enabled)
+                {
+                    uint soundID = AK.EVENTS.APEX_PUZZLE_SOLVED;
+                    if (achievement.CompletionSound.SoundID != 0U)
+                    {
+                        soundID = achievement.CompletionSound.SoundID;
+                    }
+
+                    PlayerManager.GetLocalPlayerAgent().Sound.Post(soundID);
+                }
                 GuiManager.PlayerLayer.m_wardenIntel.SetIntelText("<size=200%>Achievement Unlocked!</size>\n<size=190%>" + achievement.Name + "</size>\n<size=150%>" + achievement.Description + "</size>");
                 GuiManager.PlayerLayer.m_wardenIntel.SetVisible(true, 5f);
             };
