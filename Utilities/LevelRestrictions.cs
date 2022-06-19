@@ -7,19 +7,19 @@ namespace AchievementsAPI.Utilities
     public class LevelRestrictions
     {
         public bool UseWhiteList { get; set; }
-        public List<LevelInfo> WhitelistedLevels { get; set; } = new();
-        public List<LevelInfo> BlacklistedLevels { get; set; } = new();
+        public List<LevelInfo> WhiteListedLevels { get; set; } = new();
+        public List<LevelInfo> BlackListedLevels { get; set; } = new();
 
         public bool IsValid(int expeditionIndex, eRundownTier tier)
         {
             if (this.UseWhiteList)
             {
-                return this.WhitelistedLevels?.Any((level) =>
+                return this.WhiteListedLevels?.Any((level) =>
                     level.Tier == tier && level.ExpeditionIndex == expeditionIndex) ?? false;
             }
             else
             {
-                return !(this.BlacklistedLevels?.Any((level) =>
+                return !(this.BlackListedLevels?.Any((level) =>
                     level.Tier == tier && level.ExpeditionIndex == expeditionIndex) ?? false);
             }
         }
