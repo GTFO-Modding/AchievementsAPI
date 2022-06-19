@@ -348,3 +348,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+GameFolder.props
+# Ignore Dependencies.props until I fix it up.
+Dependencies.props
