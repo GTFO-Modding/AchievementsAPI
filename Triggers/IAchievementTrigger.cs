@@ -1,18 +1,16 @@
-﻿using AchievementsAPI.Conditions;
-using AchievementsAPI.Registries;
-using System;
+﻿using AchievementsAPI.Progress;
 
 namespace AchievementsAPI.Triggers
 {
-    public interface IAchievementTrigger : IRegisterable
+    internal interface IAchievementTrigger : _IAchievementTriggerBase
     {
-        int Count { get; set; }
-        TriggerData Data { get; set; }
-        ConditionOverrides ConditionOverrides { get; set; }
-
-        Type GetDataType();
-
-        void Trigger(object?[] data, ref AchievementTriggerProgress progress);
-        void Setup();
+        void ResetProgress(AchievementTriggerProgress progress);
+        void Trigger(object?[] data, AchievementTriggerProgress progress);
+    }
+    internal interface IAchievementTrigger<TProgressData> : _IAchievementTriggerBase
+        where TProgressData : TriggerProgressData, new()
+    {
+        void ResetProgress(AchievementTriggerProgress<TProgressData> progress);
+        void Trigger(object?[] data, AchievementTriggerProgress<TProgressData> progress);
     }
 }

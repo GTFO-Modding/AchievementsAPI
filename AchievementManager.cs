@@ -6,18 +6,36 @@ using System.IO;
 using System.Text.Json;
 using AchievementsAPI.Registries;
 using Player;
+using AchievementsAPI.Progress;
 
 namespace AchievementsAPI
 {
+    /// <summary>
+    /// The AchievementManager is responsible for tracking the achievements, loading achievements
+    /// and their progress, as well as managing specific parts about achievements like Triggers.
+    /// <para>
+    /// It also contains a registry handler used for registering Achievements, Conditions, and
+    /// Triggers.
+    /// </para>
+    /// </summary>
     public static class AchievementManager
     {
+        /// <summary>
+        /// This manager's registry handler.
+        /// <para>
+        /// Use this to register Achievements, Conditions, or Triggers.
+        /// </para>
+        /// </summary>
         public static RegistryHandler Registry { get; } = new();
 
+        /// <summary>
+        /// The OnAchievementUnlocked event is invoked when an achievement is unlocked.
+        /// </summary>
         public static event Action<AchievementDefinition> OnAchievementUnlocked;
 
         private static string? s_achievementAPIFolder;
         private static string? s_achievementProgressPath;
-        private static string? s_achievementDefinitionPath;
+        private static string? s_achievementDefinitionsPath;
         private static string FetchAchievementAPIFolder()
         {
             if (s_achievementAPIFolder == null)
@@ -31,6 +49,9 @@ namespace AchievementsAPI
             return s_achievementAPIFolder;
         }
 
+        /// <summary>
+        /// The path to the Achievement Progress json file.
+        /// </summary>
         public static string AchievementProgressPath
         {
             get
@@ -43,20 +64,28 @@ namespace AchievementsAPI
             }
         }
 
-        public static string AchievementDefinitionPath
+        /// <summary>
+        /// The path to the Achievement Definitions json file.
+        /// </summary>
+        public static string AchievementDefinitionsPath
         {
             get
             {
-                if (s_achievementDefinitionPath == null)
+                if (s_achievementDefinitionsPath == null)
                 {
-                    s_achievementDefinitionPath = Path.Combine(FetchAchievementAPIFolder(), "achievements.json");
+                    s_achievementDefinitionsPath = Path.Combine(FetchAchievementAPIFolder(), "achievements.json");
                 }
-                return s_achievementDefinitionPath;
+                return s_achievementDefinitionsPath;
             }
         }
 
         private static readonly List<AchievementInstance> s_achievements = new();
 
+        /// <summary>
+        /// Activates/Triggers a specific trigger.
+        /// </summary>
+        /// <param name="id">The ID of the trigger.</param>
+        /// <param name="data">The Data associated with the trigger.</param>
         public static void ActivateTrigger(string id, params object?[] data)
         {
             bool save = false;
@@ -117,6 +146,9 @@ namespace AchievementsAPI
             
         }
 
+        /// <summary>
+        /// Save the current achievement progress.
+        /// </summary>
         public static void SaveProgress()
         {
             string path = AchievementProgressPath;

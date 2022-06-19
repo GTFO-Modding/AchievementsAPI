@@ -1,12 +1,15 @@
 ﻿using AchievementsAPI.Conditions;
-using AchievementsAPI.Registries;
 using AchievementsAPI.Utilities;
 using System.Text.Json;
 
 namespace AchievementsAPI.Converters
 {
+    /// <summary>
+    /// A JsonConverter for Achievement Condition Lists.
+    /// </summary>
     public class AchievementConditionListConverter : InternalRegistryListConverter<AchievementConditionList, IAchievementCondition>
     {
+        /// <inheritdoc/>
         protected override void FillElement(IAchievementCondition element, ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             bool hasData = false;
@@ -25,7 +28,9 @@ namespace AchievementsAPI.Converters
                 string property = reader.GetString() ?? throw new JsonException($"Property Name was null!");
 
                 if (!reader.Read())
+                {
                     goto UNEXPECTED_EOI;
+                }
 
                 if (property.ToLower() == "data")
                 {
@@ -51,12 +56,14 @@ namespace AchievementsAPI.Converters
             throw new JsonException("Unexpected end of input");
         }
 
+        /// <inheritdoc/>
         protected override void WriteElementProperties(Utf8JsonWriter writer, IAchievementCondition element, JsonSerializerOptions options)
         {
             writer.WritePropertyName("Data");
             JsonSerializer.Serialize(writer, element.Data, element.GetDataType(), options);
         }
 
+        /// <inheritdoc/>
         protected override IAchievementCondition CreateElementFromID(string id)
         {
             return AchievementManager.Registry.Conditions.CreateElement(id);

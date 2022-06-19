@@ -1,4 +1,5 @@
-﻿using AchievementsAPI.Utilities;
+﻿using AchievementsAPI.Progress;
+using AchievementsAPI.Utilities;
 using Enemies;
 using Gear;
 using HarmonyLib;
@@ -13,7 +14,7 @@ namespace AchievementsAPI.Triggers.BuiltIn
 
         public override string GetID() => ID;
 
-        public override void Trigger(object?[] data, ref AchievementTriggerProgress progress)
+        public override void Trigger(object?[] data, AchievementTriggerProgress progress)
         {
             if (data.Length == 0 || data[0] is not bool wasMe)
             {

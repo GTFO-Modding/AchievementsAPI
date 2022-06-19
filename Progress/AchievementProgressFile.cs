@@ -1,10 +1,9 @@
-﻿using AchievementsAPI.Registries;
-using AchievementsAPI.Utilities;
+﻿using AchievementsAPI.Utilities;
 using System.Collections.Generic;
 
-namespace AchievementsAPI
+namespace AchievementsAPI.Progress
 {
-    public class AchievementProgressFile
+    internal sealed class AchievementProgressFile
     {
         public List<SavedAchievementProgress> Achievements { get; set; }
 

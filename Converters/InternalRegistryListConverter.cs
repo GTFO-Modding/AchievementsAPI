@@ -5,12 +5,21 @@ using System.Text.Json.Serialization;
 
 namespace AchievementsAPI.Converters
 {
+    /// <summary>
+    /// An abstract JSON Converter that handles Registry Lists.
+    /// </summary>
+    /// <typeparam name="TList">The List</typeparam>
+    /// <typeparam name="TElement">The elements in the list</typeparam>
     public abstract class InternalRegistryListConverter<TList, TElement> : JsonConverter<TList>
         where TList : IRegistryList<TElement>, new()
         where TElement : IRegisterable
     {
+        /// <summary>
+        /// The write mode of this converter.
+        /// </summary>
         public InternalRegistryListWriteMode WriteMode { get; set; }
 
+        /// <inheritdoc/>
         public override TList? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             TList list = new();
@@ -110,7 +119,9 @@ namespace AchievementsAPI.Converters
         private TElement ReadElement(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (!reader.Read())
+            {
                 goto UNEXPECTED_EOI;
+            }
 
             if (reader.TokenType != JsonTokenType.PropertyName)
             {
@@ -124,7 +135,9 @@ namespace AchievementsAPI.Converters
             }
 
             if (!reader.Read())
+            {
                 goto UNEXPECTED_EOI;
+            }
 
             if (reader.TokenType == JsonTokenType.Null)
             {
@@ -151,10 +164,22 @@ namespace AchievementsAPI.Converters
             return element;
         }
 
+        /// <summary>
+        /// Create an element with the specific ID.
+        /// </summary>
+        /// <param name="id">The ID of the element to create.</param>
+        /// <returns>The created element.</returns>
         protected abstract TElement CreateElementFromID(string id);
+        /// <summary>
+        /// Fills the <paramref name="element"/> with values from the <paramref name="reader"/>.
+        /// </summary>
+        /// <param name="element">The element to fill.</param>
+        /// <param name="reader">The JSON reader</param>
+        /// <param name="options">The Json Serializer options.</param>
         protected abstract void FillElement(TElement element, ref Utf8JsonReader reader, JsonSerializerOptions options);
 
 
+        /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, TList value, JsonSerializerOptions options)
         {
             switch (this.WriteMode)
@@ -217,6 +242,14 @@ namespace AchievementsAPI.Converters
             writer.WriteEndObject();
         }
 
+        /// <summary>
+        /// Write the elements properties to the <paramref name="writer"/>. Don't worry about
+        /// writing <see cref="JsonTokenType.StartObject"/> and <see cref="JsonTokenType.EndObject"/>,
+        /// as that's already handled for you.
+        /// </summary>
+        /// <param name="writer">The writer.</param>
+        /// <param name="element">The element to write.</param>
+        /// <param name="options">The options.</param>
         protected abstract void WriteElementProperties(Utf8JsonWriter writer, TElement element, JsonSerializerOptions options);
     }
 }

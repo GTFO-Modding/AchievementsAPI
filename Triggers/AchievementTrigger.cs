@@ -1,65 +1,46 @@
-﻿using AchievementsAPI.Conditions;
+﻿using AchievementsAPI.Progress;
 using System;
 
 namespace AchievementsAPI.Triggers
 {
-    public abstract class AchievementTrigger<TData> : IAchievementTrigger
+    /// <summary>
+    /// The base class for implementing an achievement trigger with the specified data.
+    /// </summary>
+    /// <typeparam name="TData">The data for this trigger.</typeparam>
+    public abstract class AchievementTrigger<TData> : AchievementTriggerBase<TData>
         where TData : TriggerData, new()
     {
-        private bool m_isSetup;
+        /// <inheritdoc/>
+        public sealed override Type? GetProgressDataType() => null;
 
-        public int Count { get; set; }
-        public ConditionOverrides ConditionOverrides { get; set; }
-        public TData Data { get; set; }
-
-        protected AchievementTrigger()
+        /// <summary>
+        /// Reset the progress to default.
+        /// <para>
+        /// Default implementation sets <c>TriggerCount</c> to 0.
+        /// </para>
+        /// </summary>
+        /// <param name="progress">The progress to reset.</param>
+        public virtual void ResetProgress(AchievementTriggerProgress progress)
         {
-            this.Data = new();
-            this.ConditionOverrides = new();
+            progress.TriggerCount = 0;
         }
+        /// <summary>
+        /// Triggers this trigger.
+        /// </summary>
+        /// <param name="data">The data</param>
+        /// <param name="progress">The progress that can be modified</param>
+        public abstract void Trigger(object?[] data, AchievementTriggerProgress progress);
 
-        public void Setup()
-        {
-            if (this.m_isSetup) return;
+        internal sealed override void ResetProgress(IAchievementTriggerProgress progress) 
+            => this.ResetProgress((AchievementTriggerProgress)progress);
 
-            this.DoSetup();
-            this.m_isSetup = true;
-
-            foreach (var condition in this.ConditionOverrides.AdditionalConditions)
-            {
-                condition.Setup();
-            }
-        }
-
-        protected virtual void DoSetup()
-        { }
-
-        public abstract void Trigger(object?[] data, ref AchievementTriggerProgress progress);
-
-        public abstract string GetID();
-        Type IAchievementTrigger.GetDataType() => typeof(TData);
-        TriggerData IAchievementTrigger.Data
-        {
-            get
-            {
-                if (this.Data is null)
-                    this.Data = new();
-                return this.Data;
-            }
-            set
-            {
-                if (value is TData data)
-                {
-                    this.Data = data;
-                }
-                else
-                {
-                    throw new InvalidCastException($"Cannot convert type {value?.GetType()?.Name ?? "null"} to {typeof(TData).Name}");
-                }
-            }
-        }
+        internal sealed override void Trigger(object?[] data, IAchievementTriggerProgress progress) 
+            => this.Trigger(data, (AchievementTriggerProgress)progress);
     }
 
+    /// <summary>
+    /// The base class for implementing an achievement trigger with no data.
+    /// </summary>
     public abstract class AchievementTrigger : AchievementTrigger<TriggerData>
     { }
 }

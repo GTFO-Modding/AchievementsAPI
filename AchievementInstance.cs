@@ -1,4 +1,6 @@
-﻿using AchievementsAPI.Registries;
+﻿using AchievementsAPI.Progress;
+using AchievementsAPI.Registries;
+using AchievementsAPI.Triggers;
 using System.Collections.Generic;
 
 namespace AchievementsAPI
@@ -19,7 +21,7 @@ namespace AchievementsAPI
             get
             {
                 Dictionary<string, uint> incrementMap = new();
-                foreach (var trigger in this.Definition.Triggers)
+                foreach (IAchievementTriggerBase? trigger in this.Definition.Triggers)
                 {
                     string triggerID = trigger.GetID();
                     if (!incrementMap.TryGetValue(triggerID, out uint increment))
@@ -31,7 +33,7 @@ namespace AchievementsAPI
                         incrementMap[triggerID] = ++increment;
                     }
 
-                    var triggerInfo = this.Progress.GetTriggerInfo(triggerID, increment);
+                    AchievementProgress.TriggerInfo? triggerInfo = this.Progress.GetTriggerInfo(triggerID, increment);
                     if (triggerInfo.Progress.TriggerCount < trigger.Count)
                     {
                         return false;
@@ -41,24 +43,27 @@ namespace AchievementsAPI
             }
         }
 
-        internal void ActivateTrigger(string id, object?[] data, ref bool save)
+        internal void ResetProgress(string id)
         {
-            if (this.Completed)
-                return;
+            bool save = false;
 
-            foreach (var condition in this.Definition.Conditions)
+            this.DoResetProgress(id, ref save);
+
+            if (save)
             {
-                if (!condition.IsMet())
-                    return;
+                AchievementManager.SaveProgress();
             }
+        }
 
-            var triggers = this.Definition.Triggers.GetValues(id);
+        private void DoResetProgress(string id, ref bool save)
+        {
+            IAchievementTriggerBase[]? triggers = this.Definition.Triggers.GetValues(id);
             for (int increment = 0; increment < triggers.Length; increment++)
             {
-                var trigger = triggers[increment];
+                var trigger = (_IAchievementTriggerBase)triggers[increment];
                 if (trigger.ConditionOverrides?.AdditionalConditions != null)
                 {
-                    foreach (var condition in trigger.ConditionOverrides.AdditionalConditions)
+                    foreach (Conditions.IAchievementCondition? condition in trigger.ConditionOverrides.AdditionalConditions)
                     {
                         if (!condition.IsMet())
                         {
@@ -67,17 +72,70 @@ namespace AchievementsAPI
                     }
                 }
 
-                var triggerInfo = this.Progress.GetTriggerInfo(id, (uint)increment);
-                var progress = triggerInfo.Progress;
-                trigger.Trigger(data, ref progress);
+                AchievementProgress.TriggerInfo? triggerInfo = this.Progress.GetTriggerInfo(id, (uint)increment);
+                IAchievementTriggerProgress? oldProgress = triggerInfo.Progress.Clone();
+                trigger.ResetProgress(triggerInfo.Progress);
 
-                if (triggerInfo.Progress != progress)
+                if (!triggerInfo.Progress.Equals(oldProgress))
                 {
                     save = true;
                 }
 
-                triggerInfo.Progress = progress;
+            }
+        }
 
+        internal void ResetProgress()
+        {
+            bool save = false;
+            foreach (string? id in this.Definition.Triggers.GetIDS())
+            {
+                this.DoResetProgress(id, ref save);
+            }
+
+            if (save)
+            {
+                AchievementManager.SaveProgress();
+            }
+        }
+
+        internal void ActivateTrigger(string id, object?[] data, ref bool save)
+        {
+            if (this.Completed)
+            {
+                return;
+            }
+
+            foreach (Conditions.IAchievementCondition? condition in this.Definition.Conditions)
+            {
+                if (!condition.IsMet())
+                {
+                    return;
+                }
+            }
+
+            IAchievementTriggerBase[]? triggers = this.Definition.Triggers.GetValues(id);
+            for (int increment = 0; increment < triggers.Length; increment++)
+            {
+                var trigger = (_IAchievementTriggerBase)triggers[increment];
+                if (trigger.ConditionOverrides?.AdditionalConditions != null)
+                {
+                    foreach (Conditions.IAchievementCondition? condition in trigger.ConditionOverrides.AdditionalConditions)
+                    {
+                        if (!condition.IsMet())
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                AchievementProgress.TriggerInfo? triggerInfo = this.Progress.GetTriggerInfo(id, (uint)increment);
+                IAchievementTriggerProgress? oldProgress = triggerInfo.Progress.Clone();
+                trigger.Trigger(data, triggerInfo.Progress);
+
+                if (!triggerInfo.Progress.Equals(oldProgress))
+                {
+                    save = true;
+                }
             }
 
             if (this.Completed)

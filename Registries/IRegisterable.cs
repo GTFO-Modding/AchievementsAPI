@@ -1,5 +1,9 @@
 ﻿namespace AchievementsAPI.Registries
 {
+    /// <summary>
+    /// Represents something that's registerable. This means that
+    /// it has a unique identifier that can be used to get this specific item.
+    /// </summary>
     public interface IRegisterable
     {
         /// <summary>

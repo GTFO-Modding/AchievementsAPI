@@ -67,7 +67,7 @@ namespace AchievementsAPI
             public static void InitializePatch()
             {
 
-                string path = AchievementManager.AchievementDefinitionPath;
+                string path = AchievementManager.AchievementDefinitionsPath;
                 AchievementManager.Registry.Achievements.UnRegisterAll();
 
                 if (!File.Exists(path))

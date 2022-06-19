@@ -1,14 +1,17 @@
 ﻿using AchievementsAPI.Conditions;
-using AchievementsAPI.Registries;
 using AchievementsAPI.Triggers;
 using AchievementsAPI.Utilities;
 using System.Text.Json;
 
 namespace AchievementsAPI.Converters
 {
-    public class AchievementTriggerListConverter : InternalRegistryListConverter<AchievementTriggerList, IAchievementTrigger>
+    /// <summary>
+    /// A json converter for handling <see cref="AchievementTriggerList"/>.
+    /// </summary>
+    public class AchievementTriggerListConverter : InternalRegistryListConverter<AchievementTriggerList, IAchievementTriggerBase>
     {
-        protected override void FillElement(IAchievementTrigger element, ref Utf8JsonReader reader, JsonSerializerOptions options)
+        /// <inheritdoc/>
+        protected override void FillElement(IAchievementTriggerBase element, ref Utf8JsonReader reader, JsonSerializerOptions options)
         {
             bool hasData = false;
             bool hasCount = false;
@@ -28,7 +31,9 @@ namespace AchievementsAPI.Converters
                 string property = reader.GetString() ?? throw new JsonException($"Property Name was null!");
 
                 if (!reader.Read())
+                {
                     goto UNEXPECTED_EOI;
+                }
 
                 string loweredProperty = property.ToLower();
                 if (loweredProperty == "data")
@@ -77,7 +82,8 @@ namespace AchievementsAPI.Converters
             throw new JsonException("Unexpected end of input");
         }
 
-        protected override void WriteElementProperties(Utf8JsonWriter writer, IAchievementTrigger element, JsonSerializerOptions options)
+        /// <inheritdoc/>
+        protected override void WriteElementProperties(Utf8JsonWriter writer, IAchievementTriggerBase element, JsonSerializerOptions options)
         {
             writer.WritePropertyName("Count");
             writer.WriteNumberValue(element.Count);
@@ -85,9 +91,8 @@ namespace AchievementsAPI.Converters
             JsonSerializer.Serialize(writer, element.Data, element.GetDataType(), options);
         }
 
-        protected override IAchievementTrigger CreateElementFromID(string id)
-        {
-            return AchievementManager.Registry.Triggers.CreateElement(id);
-        }
+        /// <inheritdoc/>
+        protected override IAchievementTriggerBase CreateElementFromID(string id)
+            => AchievementManager.Registry.Triggers.CreateElement(id);
     }
 }

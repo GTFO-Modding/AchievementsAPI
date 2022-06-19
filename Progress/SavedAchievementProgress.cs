@@ -1,6 +1,6 @@
-﻿namespace AchievementsAPI
+﻿namespace AchievementsAPI.Progress
 {
-    public sealed class SavedAchievementProgress
+    internal sealed class SavedAchievementProgress
     {
         public string AchievementID { get; set; }
         public AchievementProgress Progress { get; set; }

@@ -5,6 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace AchievementsAPI.Registries
 {
+    /// <summary>
+    /// Representation of a registry.
+    /// </summary>
     public interface IRegistry : ICollection
     {
         /// <summary>
@@ -103,6 +106,10 @@ namespace AchievementsAPI.Registries
         void UnRegisterAll();
     }
 
+    /// <summary>
+    /// Representation of a registry of specific elements.
+    /// </summary>
+    /// <typeparam name="T">The element this registry contains.</typeparam>
     public interface IRegistry<T> : IRegistry, ICollection<T>
         where T : IRegisterable
     {
@@ -152,6 +159,15 @@ namespace AchievementsAPI.Registries
         /// <see langword="false"/>.</returns>
         bool TryGetEntry(string id, [NotNullWhen(true)] out T? entry);
 
+        /// <summary>
+        /// Gets an item in this registry with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the item to get.</param>
+        /// <returns>The found item.</returns>
+        /// <exception cref="KeyNotFoundException">Thrown if no such entry
+        /// with id <paramref name="id"/> exists</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="id"/>
+        /// is <see langword="null"/></exception>
         new T this[string id] { get; }
     }
 }

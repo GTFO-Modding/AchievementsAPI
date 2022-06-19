@@ -5,18 +5,31 @@ using System.Text.Json.Serialization;
 
 namespace AchievementsAPI
 {
+    /// <summary>
+    /// A list of achievement triggers.
+    /// </summary>
     [JsonConverter(typeof(AchievementTriggerListConverter))]
-    public sealed class AchievementTriggerList : RegistryList<IAchievementTrigger>
+    public sealed class AchievementTriggerList : RegistryList<IAchievementTriggerBase>
     {
+        /// <summary>
+        /// Initializes this list as empty.
+        /// </summary>
         public AchievementTriggerList()
         { }
 
+        /// <summary>
+        /// Initializes this list, copying all elements from <paramref name="other"/>
+        /// into this list.
+        /// </summary>
+        /// <param name="other">The list to copy over.</param>
         public AchievementTriggerList(AchievementTriggerList other)
         {
             if (other == null)
+            {
                 return;
+            }
 
-            foreach (IAchievementTrigger trigger in other)
+            foreach (IAchievementTriggerBase trigger in other)
             {
                 this.Add(trigger);
             }

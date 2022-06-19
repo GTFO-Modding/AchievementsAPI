@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AchievementsAPI.Progress;
+using HarmonyLib;
 
 namespace AchievementsAPI.Triggers.BuiltIn
 {
@@ -12,7 +13,7 @@ namespace AchievementsAPI.Triggers.BuiltIn
             return ID;
         }
 
-        public override void Trigger(object?[] data, ref AchievementTriggerProgress progress)
+        public override void Trigger(object?[] data, AchievementTriggerProgress progress)
         {
             progress.TriggerCount++;
         }

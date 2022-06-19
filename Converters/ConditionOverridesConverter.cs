@@ -6,14 +6,20 @@ using System.Text.Json.Serialization;
 
 namespace AchievementsAPI.Converters
 {
+    /// <summary>
+    /// A JsonConverter for handling <see cref="ConditionOverrides"/>.
+    /// </summary>
     public class ConditionOverridesConverter : JsonConverter<ConditionOverrides>
     {
+        /// <inheritdoc/>
         public override ConditionOverrides? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var overrides = new ConditionOverrides();
 
             if (reader.TokenType == JsonTokenType.Null)
+            {
                 return overrides;
+            }
 
             if (reader.TokenType != JsonTokenType.StartObject)
             {
@@ -38,7 +44,9 @@ namespace AchievementsAPI.Converters
                 string loweredPropertyName = propertyName.ToLower();
 
                 if (!reader.Read())
+                {
                     goto UNEXPECTED_EOI;
+                }
 
                 if (loweredPropertyName == "hasoverrides")
                 {
@@ -73,6 +81,7 @@ namespace AchievementsAPI.Converters
 
         }
 
+        /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, ConditionOverrides value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
