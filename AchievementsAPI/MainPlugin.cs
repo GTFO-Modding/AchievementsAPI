@@ -119,6 +119,16 @@ namespace AchievementsAPI
             [HarmonyWrapSafe]
             public static void InitializePatch()
             {
+                InitializeAchievements();
+
+                L.Info("Requesting Achievement Register from AchievementManager.");
+                AchievementManager.InvokeRegisterAchievements();
+
+                InitializeAchievementProgress();
+            }
+
+            private static void InitializeAchievements()
+            {
                 string path = AchievementManager.AchievementDefinitionsPath;
 
                 if (!File.Exists(path))
@@ -153,10 +163,10 @@ namespace AchievementsAPI
                     L.Debug($"Registering Achievement '{achievement.ID}' ({achievement.Name})");
                     RegistryManager.Achievements.Register(achievement);
                 }
+            }
 
-                L.Info("Requesting Achievement Register from AchievementManager.");
-                AchievementManager.InvokeRegisterAchievements();
-
+            private static void InitializeAchievementProgress()
+            {
                 L.Info("Loading Progress!");
                 AchievementManager.LoadProgress();
             }
