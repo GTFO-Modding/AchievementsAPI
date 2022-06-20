@@ -281,7 +281,7 @@ actually setup triggering the AchievementAPI.
 
 Generally, the pattern for implementing an achievement trigger looks like this:
 ```cs
-[TriggerPatches(typeof(Patches))]
+[TriggerPatch(typeof(Patches))]
 public class TriggerName : AchievementTrigger
 {
     public const string ID = "TriggerId";
@@ -312,7 +312,7 @@ This is to allow transferring data between the listener patch and the trigger it
 
 For example, take a look at the `ExpeditionFailTrigger`:
 ```cs
-[TriggerPatches(typeof(Patches))]
+[TriggerPatch(typeof(Patches))]
 public class ExpeditionFailTrigger : AchievementTrigger
 {
     public const string ID = "FailExpedition";

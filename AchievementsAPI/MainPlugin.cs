@@ -1,6 +1,7 @@
 ﻿using AchievementsAPI.Achievements;
 using AchievementsAPI.Managers;
 using AchievementsAPI.Triggers;
+using AchievementsAPI.Triggers.Attributes;
 using AchievementsAPI.Triggers.Registries;
 using AchievementsAPI.Utilities;
 using BepInEx;
@@ -8,6 +9,7 @@ using BepInEx.IL2CPP;
 using BepInEx.Logging;
 using GameData;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -49,16 +51,55 @@ namespace AchievementsAPI
             [HarmonyPatch(typeof(GS_Offline), nameof(GS_Offline.Enter))]
             [HarmonyPostfix]
             [HarmonyWrapSafe]
-            public static void PatchTriggers()
+            public static void InitializeTriggers()
             {
-                L.Info("Patching triggers!");
+                L.Info("Initializing triggers!");
                 foreach (TriggerElementFactorySettings? triggerInfo in RegistryManager.Triggers)
                 {
-                    L.Debug($"Patching '{triggerInfo.ID}'");
-                    TriggerPatchesAttribute? patchesAttribute = triggerInfo.Type.GetCustomAttribute<TriggerPatchesAttribute>();
-                    if (patchesAttribute != null)
+                    L.Debug($"Initializing '{triggerInfo.ID}'");
+                    Type triggerType = triggerInfo.Type;
+
+                    // setup trigger patches
+                    IEnumerable<TriggerPatchAttribute> patchAttributes = triggerType.GetCustomAttributes<TriggerPatchAttribute>();
+                    foreach (TriggerPatchAttribute patchAttribute in patchAttributes)
                     {
-                        s_harmony!.PatchAll(patchesAttribute.GetPatchType());
+                        Type patchType = patchAttribute.GetPatchType();
+                        L.Debug($"> Patching '{patchType.FullName}'");
+                        s_harmony!.PatchAll(patchType);
+                    }
+
+                    // setup trigger using methods
+                    IEnumerable<TriggerSetupMethodAttribute> setupAttributes = triggerType.GetCustomAttributes<TriggerSetupMethodAttribute>();
+
+                    foreach (TriggerSetupMethodAttribute setupAttribute in setupAttributes)
+                    {
+                        string setupMethodName = setupAttribute.GetMethodName();
+                        MethodInfo? setupMethod = triggerType.GetMethod(setupMethodName, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static, Array.Empty<Type>());
+
+                        if (setupMethod == null)
+                        {
+                            L.Warn($"Trigger '{triggerInfo.ID}' specifies a setup method named {setupMethodName}, but no method was found. Make sure your method is static, and takes no arguments.");
+                            continue;
+                        }
+
+                        try
+                        {
+                            L.Debug("> Preparing to call method '" + setupMethodName + "'");
+                            setupMethod.Invoke(null, null);
+                            L.Debug("> Successfully ran setup method '" + setupMethodName + "'");
+                        }
+                        catch (TargetInvocationException invokeException)
+                        {
+                            L.Error($"Error whilst calling setup method named '{setupMethodName}' on trigger with id '{triggerInfo.ID}': {invokeException.InnerException?.ToString() ?? "Unknown Exception"}");
+                        }
+                        catch (InvalidOperationException invalidMethodException)
+                        {
+                            L.Error($"Trigger '{triggerInfo.ID}' specifies a setup method named {setupMethodName}, but is not callable. Exception: {invalidMethodException}");
+                        }
+                        catch (Exception otherException)
+                        {
+                            L.Error($"Error attempting to call setup method named '{setupMethodName}' on trigger with id '{triggerInfo.ID}': {otherException}");
+                        }
                     }
                 }
             }

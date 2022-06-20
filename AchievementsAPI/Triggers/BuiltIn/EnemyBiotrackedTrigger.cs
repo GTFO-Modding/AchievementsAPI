@@ -1,5 +1,6 @@
 ﻿using AchievementsAPI.Managers;
 using AchievementsAPI.Progress;
+using AchievementsAPI.Triggers.Attributes;
 using AchievementsAPI.Utilities;
 using Enemies;
 using Gear;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 
 namespace AchievementsAPI.Triggers.BuiltIn
 {
-    [TriggerPatches(typeof(Patches))]
+    [TriggerPatch(typeof(Patches))]
     public class EnemyBiotrackedTrigger : AchievementTrigger<EnemyBiotrackedTrigger.CustomData>
     {
         public const string ID = "EnemyBiotracked";

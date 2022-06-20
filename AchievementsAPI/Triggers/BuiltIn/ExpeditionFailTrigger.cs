@@ -1,10 +1,11 @@
 ﻿using AchievementsAPI.Managers;
 using AchievementsAPI.Progress;
+using AchievementsAPI.Triggers.Attributes;
 using HarmonyLib;
 
 namespace AchievementsAPI.Triggers.BuiltIn
 {
-    [TriggerPatches(typeof(Patches))]
+    [TriggerPatch(typeof(Patches))]
     public class ExpeditionFailTrigger : AchievementTrigger
     {
         public const string ID = "FailExpedition";
