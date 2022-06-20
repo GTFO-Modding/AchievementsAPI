@@ -291,7 +291,7 @@ public class TriggerName : AchievementTrigger
         return ID;
     }
 
-    public override void Trigger(object?[] data, ref AchievementTriggerProgress progress)
+    public override void Trigger(object?[] data, AchievementTriggerProgress progress)
     {
         progress.TriggerCount++;
     }
@@ -322,7 +322,7 @@ public class ExpeditionFailTrigger : AchievementTrigger
         return ID;
     }
 
-    public override void Trigger(object?[] data, ref AchievementTriggerProgress progress)
+    public override void Trigger(object?[] data, AchievementTriggerProgress progress)
     {
         progress.TriggerCount++;
     }
