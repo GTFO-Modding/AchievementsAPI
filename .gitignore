@@ -350,5 +350,3 @@ MigrationBackup/
 .ionide/
 
 GameFolder.props
-# Ignore Dependencies.props until I fix it up.
-Dependencies.props

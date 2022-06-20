@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(SolutionDir)/Dependencies.props" />
+
+  <ItemGroup>
+    <Reference Include="$(PluginsFolder)\MTFO.dll" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <CopyOnBuild>True</CopyOnBuild>
+    <CopyOnBuildPath>$(GameFolder)\BepInEx\plugins</CopyOnBuildPath>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <TargetFramework>$(PluginFramework)</TargetFramework>
+  </PropertyGroup>
+    
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(CopyOnBuild) == 'True'">
+    <Exec Command="COPY &quot;$(TargetDir)$(TargetFileName)&quot; &quot;$(CopyOnBuildPath)\$(TargetFileName)&quot;" />
+  </Target>
+    
+  <ItemGroup>
+    <None Include="$(SolutionDir)\AchievementsAPI\.editorconfig" />
+    <None Include="$(SolutionDir)\AchievementsAPI\Conditions\BuiltIn\.editorconfig" />
+    <None Include="$(SolutionDir)\AchievementsAPI\Triggers\BuiltIn\.editorconfig" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,72 @@
+<Project InitialTargets="ValidateGamePath">
+    <Import Project="$(MSBuildThisFileDirectory)\GameFolder.props" Condition="Exists('$(MSBuildThisFileDirectory)\GameFolder.props')" />
+  
+    <Target Name="ValidateGamePath">
+        <Error Text="The GameFolder property must be set to the Game folder." Condition="'$(GameFolder)' == '' or !Exists('$(GameFolder)')" />
+    </Target>
+
+    <PropertyGroup>
+        <BIELibsFolder>$(GameFolder)\BepInEx\core</BIELibsFolder>
+        <PluginsFolder>$(GameFolder)\BepInEx\plugins</PluginsFolder>
+    </PropertyGroup>
+    
+    <!--+ IL2CPP Properties -->
+    <PropertyGroup>
+        <DefineConstants>$(DefineConstants);IL2CPP;</DefineConstants>
+    </PropertyGroup>
+    
+    <!-- CoreCLR Compatibility -->
+    <PropertyGroup Condition="Exists('$(GameFolder)\dotnet') or !Exists('$(GameFolder)\mono')">
+        <MonoLibsFolder>$(GameFolder)\dotnet\corlib</MonoLibsFolder>
+        <PluginRuntime>coreclr</PluginRuntime>
+        <PluginFramework>net6</PluginFramework>
+    </PropertyGroup>
+    
+    <!-- Net Standard Compatibility -->
+    <PropertyGroup Condition="Exists('$(GameFolder)\mono') and !Exists('$(GameFolder)\dotnet')">
+        <MonoLibsFolder>$(GameFolder)\mono\Managed</MonoLibsFolder>
+        <PluginRuntime>mono</PluginRuntime>
+        <PluginFramework>netstandard2.1</PluginFramework>
+    </PropertyGroup>
+    
+    <!--- Unhollower -->
+    <PropertyGroup Condition="Exists('$(BIELibsFolder)\UnhollowerBaseLib.dll') and !Exists('$(BIELibsFolder)\Il2CppInterop.Runtime.dll')">
+        <DefineConstants>$(DefineConstants);UNHOLLOWER;</DefineConstants>
+        <GameAssembliesFolder>$(GameFolder)\BepInEx\unhollowed</GameAssembliesFolder>
+        <IL2CPPInteropHandler>unhollower</IL2CPPInteropHandler>
+    </PropertyGroup>
+    
+    <!--- Il2CppInterop -->
+    <PropertyGroup Condition="Exists('$(BIELibsFolder)\Il2CppInterop.Runtime.dll')">
+        <DefineConstants>$(DefineConstants);IL2CPP_INTEROP;</DefineConstants>
+        <GameAssembliesFolder>$(GameFolder)\BepInEx\interop</GameAssembliesFolder>
+        <IL2CPPInteropHandler>il2cppinterop</IL2CPPInteropHandler>
+    </PropertyGroup>
+  
+    <!--+ Assemblies -->
+    <ItemGroup>
+        <!--- BepInEx -->
+        <Reference Include="$(BIELibsFolder)\BepInEx.*.dll" Private="false" />
+        <Reference Include="$(BIELibsFolder)\0Harmony.dll" Private="false" />
+
+        <!--- Game Assemblies -->
+        <Reference Include="$(GameAssembliesFolder)/*.dll" Private="false" />
+        <Reference Remove="$(GameAssembliesFolder)/netstandard.dll" />
+        <Reference Remove="$(GameAssembliesFolder)/mscorlib.dll" />
+        <Reference Remove="$(GameAssembliesFolder)/Newtonsoft.Json.dll" />
+    </ItemGroup>
+
+    <!--+ Il2Cpp Interop Assemblies -->
+    <ItemGroup>
+        <Reference Include="$(BIELibsFolder)\UnhollowerBaseLib.dll" Condition="'$(IL2CPPInteropHandler)' == 'unhollower'" Private="false" />
+        <Reference Include="$(BIELibsFolder)\UnhollowerRuntimeLib.dll" Condition="'$(IL2CPPInteropHandler)' == 'unhollower'" Private="false" />
+        <Reference Include="$(BIELibsFolder)\Il2CppInterop.Runtime.dll" Condition="'$(IL2CPPInteropHandler)' == 'il2cppinterop'" Private="false" />
+    </ItemGroup>
+    
+    <!--+ Util Assemblies -->
+    <ItemGroup>
+        <Reference Include="$(MonoLibsFolder)\Microsoft.Bcl.AsyncInterfaces.dll" Private="false" />
+        <Reference Include="$(MonoLibsFolder)\System.Text.Json.dll" Private="false" />
+        <Reference Include="$(MonoLibsFolder)\System.Runtime.CompilerServices.Unsafe.dll" Private="false" />
+    </ItemGroup>
+</Project>
