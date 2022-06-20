@@ -217,8 +217,7 @@ Currently looks like:
 Plugins can extend the behaviour of the achievement system by adding new achievements, conditions, or
 triggers.
 
-Conditions and Triggers should be registered before `GameDataInit.Initialize()` runs, and Achievements should be defined after
-`GameDataInit.Initialize()` runs.
+Conditions and Triggers should be registered before `GameDataInit.Initialize()` runs, and Achievements should be defined using a callback on the provided listener in `AchievementManager`.
 
 #### Conditions
 Conditions are pretty basic. There are two "types" of Conditions: One with data, and one without.
@@ -271,10 +270,10 @@ public sealed class IsDownedCondition : AchievementCondition<IsDownedCondition.C
 
 Here, Data is needed, and thus another type is needed which extends `ConditionData`. Then pass that type in as a generic parameter to `AchievementCondition`
 
-To register a condition, use `AchievementManager`:
+To register a condition, use `RegistryManager`:
 
 ```cs
-AchievementManager.Registry.Conditions.Register<MyCondition>();
+RegistryManager.Conditions.Register<MyCondition>();
 ```
 #### Triggers
 Triggers are a little more complex. They have to manage achievement progress, as well as
@@ -341,18 +340,24 @@ public class ExpeditionFailTrigger : AchievementTrigger
 
 For more in depth information on sending data over from the listener, look at `EnemyBiotrackedTrigger.cs`
 
-To register a trigger, once again use `AchievementManager`:
+To register a trigger, once again use `RegistryManager`:
 
 ```cs
-AchievementManager.Registry.Triggers.Register<MyTrigger>();
+RegistryManager.Triggers.Register<MyTrigger>();
 ```
 
 #### Achievements
 To create achievements, create a instantiate a new `AchievementDefinition`. Customize it to your liking.
-Finally, to register it, use `AchievementManager`:
+
+Next, add an event listener to `AchievementManager.RegisterAchievementsListener`
+
+Inside the listener, finally register it using RegistryManager:
 
 ```cs
-AchievementManager.Registry.Achievements.Register(myAchievement);
+AchievementManager.RegisterAchievementsListener += () =>
+{
+    RegistryManager.Achievements.Register(myAchievement);
+};
 ```
 
 
