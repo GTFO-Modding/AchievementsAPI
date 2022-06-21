@@ -19,7 +19,7 @@
     <PropertyGroup Condition="Exists('$(GameFolder)\dotnet') or !Exists('$(GameFolder)\mono')">
         <MonoLibsFolder>$(GameFolder)\dotnet\corlib</MonoLibsFolder>
         <PluginRuntime>coreclr</PluginRuntime>
-        <PluginFramework>net6</PluginFramework>
+        <PluginFramework>net6.0</PluginFramework>
     </PropertyGroup>
     
     <!-- Net Standard Compatibility -->
@@ -65,8 +65,7 @@
     
     <!--+ Util Assemblies -->
     <ItemGroup>
-        <Reference Include="$(MonoLibsFolder)\Microsoft.Bcl.AsyncInterfaces.dll" Private="false" />
-        <Reference Include="$(MonoLibsFolder)\System.Text.Json.dll" Private="false" />
-        <Reference Include="$(MonoLibsFolder)\System.Runtime.CompilerServices.Unsafe.dll" Private="false" />
+        <Reference Include="$(MonoLibsFolder)\*.dll" Private="false" />
+        <Reference Condition="'$(PluginRuntime)' == 'coreclr'" Include="$(MonoLibsFolder)\..\System.Private.CoreLib.dll" Private="false" />
     </ItemGroup>
 </Project>
