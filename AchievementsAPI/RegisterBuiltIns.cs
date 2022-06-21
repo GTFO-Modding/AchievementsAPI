@@ -30,6 +30,7 @@ namespace AchievementsAPI
             RegisterTrigger<DownedTrigger>();
             RegisterTrigger<JumpTrigger>();
             RegisterTrigger<ExpeditionFailTrigger>();
+            RegisterTrigger<ExpeditionSuccessTrigger>();
         }
     }
 }
