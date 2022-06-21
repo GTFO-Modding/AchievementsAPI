@@ -17,6 +17,7 @@
     <CopyOnBuild>True</CopyOnBuild>
     <CopyOnBuildPath>$(GameFolder)\BepInEx\plugins</CopyOnBuildPath>
     <TargetFramework>$(PluginFramework)</TargetFramework>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
     
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(CopyOnBuild) == 'True'">

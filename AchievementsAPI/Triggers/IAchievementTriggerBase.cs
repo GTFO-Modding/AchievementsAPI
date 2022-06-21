@@ -41,5 +41,19 @@ namespace AchievementsAPI.Triggers
         /// Set up this achievement trigger.
         /// </summary>
         void Setup();
+
+        /// <summary>
+        /// Returns whether this trigger can be triggered with
+        /// the given data.
+        /// <para>
+        /// If this method returns <see langword="true"/>, then
+        /// the conditions of whether this trigger can be activated will be checked,
+        /// then the <c>Trigger</c> method will be called.
+        /// </para>
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns><see langword="true"/> if this trigger can be triggered
+        /// with <paramref name="data"/>, otherwise <see langword="false"/>.</returns>
+        bool CanBeTriggered(object?[] data);
     }
 }

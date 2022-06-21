@@ -160,6 +160,76 @@ namespace AchievementsAPI.Managers
             }));
         }
 
+        /// <summary>
+        /// Resets the progress of all achievements!
+        /// </summary>
+        public static void ResetProgress()
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                instance.ResetProgress(dontSave: true);
+            }
+
+            SaveProgress();
+        }
+
+        /// <summary>
+        /// Resets all progress for the achievement with the given ID.
+        /// </summary>
+        /// <param name="achievementID">The ID of the achievement to reset progress of.</param>
+        public static void ResetAchievementProgress(string achievementID)
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                if (instance.Definition.ID == achievementID)
+                {
+                    instance.ResetProgress();
+                    return;
+                }
+            }
+
+            L.Warn($"Attempted to reset progress for achievement with id '{achievementID}', but no such achievement exists!");
+        }
+
+        /// <summary>
+        /// Resets all progress for all triggers with the given ID in the
+        /// achievement with the given ID.
+        /// </summary>
+        /// <param name="achievementID">The ID of the achievement to reset progress of.</param>
+        /// <param name="triggerID">The ID of the triggers to reset the progress of.</param>
+        public static void ResetTriggerProgress(string achievementID, string triggerID)
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                if (instance.Definition.ID == achievementID)
+                {
+                    instance.ResetProgress(triggerID);
+                    return;
+                }
+            }
+            L.Warn($"Attempted to reset progress for triggers with id '{triggerID}' in achievement with id '{achievementID}', but no such achievement exists!");
+        }
+
+        /// <summary>
+        /// Resets all progress for all trigger with the given ID and increment
+        /// in the achievement with the given ID.
+        /// </summary>
+        /// <param name="achievementID">The ID of the achievement to reset progress of.</param>
+        /// <param name="triggerID">The ID of the trigger to reset the progress of.</param>
+        /// <param name="increment">The increment of the trigger to reset the progress of.</param>
+        public static void ResetTriggerProgress(string achievementID, string triggerID, uint increment)
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                if (instance.Definition.ID == achievementID)
+                {
+                    instance.ResetProgress(triggerID, increment);
+                    return;
+                }
+            }
+            L.Warn($"Attempted to reset progress for trigger with id '{triggerID}' and increment {increment} in achievement with id '{achievementID}', but no such achievement exists!");
+        }
+
         internal static void InvokeOnAchievementUnlocked(AchievementDefinition achievement)
         {
             try

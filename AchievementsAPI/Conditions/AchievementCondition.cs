@@ -45,13 +45,17 @@ namespace AchievementsAPI.Conditions
         public abstract bool IsMet();
 
         /// <inheritdoc/>
-        public virtual bool IsMetForTrigger(IAchievementTriggerBase trigger)
+        public virtual bool IsMetForTrigger(string achievementID, IAchievementTriggerBase trigger, uint triggerIncrement)
         {
-            return this.IsMet();
+            return true;
         }
 
         /// <inheritdoc/>
-        public virtual void OnTriggerActivated(IAchievementTriggerBase trigger)
+        public virtual void BeforeTriggerActivated(string achievementID, IAchievementTriggerBase trigger, uint triggerIncrement)
+        { }
+
+        /// <inheritdoc/>
+        public virtual void AfterTriggerActivated(string achievementID, IAchievementTriggerBase trigger, uint triggerIncrement)
         { }
 
         /// <inheritdoc/>

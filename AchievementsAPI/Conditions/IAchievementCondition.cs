@@ -32,13 +32,24 @@ namespace AchievementsAPI.Conditions
         /// <summary>
         /// Returns whether or not this condition is met for the specific trigger.
         /// </summary>
+        /// <param name="achievementID">The ID of the achievement the trigger belongs to.</param>
         /// <param name="trigger">The trigger to test.</param>
+        /// <param name="triggerIncrement">The increment of the trigger in the achievement.</param>
         /// <returns>Whether or not this condition is met for the specific trigger.</returns>
-        bool IsMetForTrigger(IAchievementTriggerBase trigger);
+        bool IsMetForTrigger(string achievementID, IAchievementTriggerBase trigger, uint triggerIncrement);
         /// <summary>
-        /// Called whenever a trigger is activated.
+        /// Called before a trigger is activated.
         /// </summary>
+        /// <param name="achievementID">The ID of the achievement the trigger belongs to.</param>
         /// <param name="trigger">The trigger that was activated.</param>
-        void OnTriggerActivated(IAchievementTriggerBase trigger);
+        /// <param name="triggerIncrement">The increment of the trigger in the achievement.</param>
+        void BeforeTriggerActivated(string achievementID, IAchievementTriggerBase trigger, uint triggerIncrement);
+        /// <summary>
+        /// Called after a trigger is activated.
+        /// </summary>
+        /// <param name="achievementID">The ID of the achievement the trigger belongs to.</param>
+        /// <param name="trigger">The trigger that was activated.</param>
+        /// <param name="triggerIncrement">The increment of the trigger in the achievement.</param>
+        void AfterTriggerActivated(string achievementID, IAchievementTriggerBase trigger, uint triggerIncrement);
     }
 }

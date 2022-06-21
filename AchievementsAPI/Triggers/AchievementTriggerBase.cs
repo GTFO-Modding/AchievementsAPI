@@ -49,6 +49,12 @@ namespace AchievementsAPI.Triggers
             }
         }
 
+        /// <inheritdoc/>
+        public virtual bool CanBeTriggered(object?[] data)
+        {
+            return true;
+        }
+
         /// <inheritdoc cref="IAchievementTriggerBase.Setup"/>
         protected virtual void DoSetup()
         { }

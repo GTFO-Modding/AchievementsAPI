@@ -16,30 +16,30 @@ namespace AchievementsAPI.Triggers.BuiltIn
 
         public override string GetID() => ID;
 
-        public override void Trigger(object?[] data, AchievementTriggerProgress progress)
+        public override bool CanBeTriggered(object?[] data)
         {
             if (data.Length == 0 || data[0] is not bool wasMe)
             {
-                return;
+                return false;
             }
             if (data.Length == 1 || data[1] is not bool isUnique)
             {
-                return;
+                return false;
             }
             if (data.Length == 2 || data[2] is not EnemyAgent enemy)
             {
-                return;
+                return false;
             }
+            return this.ValidateTrigger(wasMe, isUnique, enemy);
+        }
 
-            if (this.ValidateTrigger(wasMe, isUnique, enemy))
-            {
-                progress.TriggerCount++;
-            }
+        public override void Trigger(object?[] data, AchievementTriggerProgress progress)
+        {
+            progress.TriggerCount++;
         }
 
         public bool ValidateTrigger(bool wasMe, bool isUnique, EnemyAgent enemy)
         {
-            var data = this.Data;
             return this.Data.IsValid(wasMe, isUnique, enemy);
         }
 
@@ -90,7 +90,7 @@ namespace AchievementsAPI.Triggers.BuiltIn
             {
                 s_taggedEnemies.RemoveAll((e) => e == null);
                 bool unique = true;
-                foreach (var taggedEnemy in s_taggedEnemies)
+                foreach (EnemyAgent? taggedEnemy in s_taggedEnemies)
                 {
                     if (taggedEnemy == enemy)
                     {
