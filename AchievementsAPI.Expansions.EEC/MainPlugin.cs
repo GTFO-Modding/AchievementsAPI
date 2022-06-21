@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.IL2CPP;
 using AchievementsAPI.Utilities;
+using AchievementsAPI.Managers;
+using AchievementsAPI.Expansions.EEC.Triggers;
 
 namespace AchievementsAPI.Expansions.EEC
 {
@@ -12,7 +14,7 @@ namespace AchievementsAPI.Expansions.EEC
     {
         public override void Load()
         {
-
+            RegistryManager.Triggers.Register<EnemyExplodeTrigger>();
         }
 
     }

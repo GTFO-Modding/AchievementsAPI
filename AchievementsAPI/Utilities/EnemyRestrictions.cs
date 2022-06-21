@@ -29,14 +29,24 @@ namespace AchievementsAPI.Utilities
         /// <returns><see langword="true"/> if the enemy is valid, otherwise
         /// <see langword="false"/></returns>
         public bool IsValid(EnemyAgent enemy)
+            => this.IsValid(enemy.EnemyDataID);
+
+        /// <summary>
+        /// Returns whether or not the given enemy ID is valid by checking if it's in
+        /// the whitelist or blacklist with it's enemy data id.
+        /// </summary>
+        /// <param name="enemyID">The enemy ID to check.</param>
+        /// <returns><see langword="true"/> if the enemy ID is valid, otherwise
+        /// <see langword="false"/></returns>
+        public bool IsValid(uint enemyID)
         {
             if (this.UseWhiteList)
             {
-                return this.WhiteList?.Contains(enemy.EnemyDataID) ?? false;
+                return this.WhiteList?.Contains(enemyID) ?? false;
             }
             else
             {
-                return !(this.BlackList?.Contains(enemy.EnemyDataID) ?? false);
+                return !(this.BlackList?.Contains(enemyID) ?? false);
             }
         }
     }
