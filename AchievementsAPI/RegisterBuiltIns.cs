@@ -25,6 +25,7 @@ namespace AchievementsAPI
             RegisterCondition<InBioscanCondition>();
             RegisterCondition<IsCrouchedCondition>();
             RegisterCondition<IsDownedCondition>();
+            RegisterCondition<TimedCondition>();
 
             RegisterTrigger<EnemyBiotrackedTrigger>();
             RegisterTrigger<DownedTrigger>();
