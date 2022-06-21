@@ -4,6 +4,12 @@
     <Target Name="ValidateGamePath">
         <Error Text="The GameFolder property must be set to the Game folder." Condition="'$(GameFolder)' == '' or !Exists('$(GameFolder)')" />
     </Target>
+    
+    <!--+ Util Properties -->
+    <PropertyGroup>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
 
     <PropertyGroup>
         <BIELibsFolder>$(GameFolder)\BepInEx\core</BIELibsFolder>
@@ -66,6 +72,8 @@
     <!--+ Util Assemblies -->
     <ItemGroup>
         <Reference Include="$(MonoLibsFolder)\*.dll" Private="false" />
+        <Reference Remove="$(MonoLibsFolder)\msquic.dll" />
+        <Reference Remove="$(MonoLibsFolder)\System.IO.Compression.Native.dll" />
         <Reference Condition="'$(PluginRuntime)' == 'coreclr'" Include="$(MonoLibsFolder)\..\System.Private.CoreLib.dll" Private="false" />
     </ItemGroup>
 </Project>
