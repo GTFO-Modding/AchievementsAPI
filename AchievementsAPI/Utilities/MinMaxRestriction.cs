@@ -12,11 +12,11 @@ namespace AchievementsAPI.Utilities
         /// <summary>
         /// The minimum value
         /// </summary>
-        public T Min { get; set; }
+        public ValueRestriction<T> Min { get; set; }
         /// <summary>
         /// The maximum value.
         /// </summary>
-        public T Max { get; set; }
+        public ValueRestriction<T> Max { get; set; }
 
         /// <summary>
         /// Initializes this restriction with the provided min max values.
@@ -25,8 +25,8 @@ namespace AchievementsAPI.Utilities
         /// <param name="max">The maximum value</param>
         public MinMaxRestriction(T min, T max)
         {
-            this.Min = min;
-            this.Max = max;
+            this.Min = new(min);
+            this.Max = new(max);
         }
 
         /// <summary>
@@ -37,8 +37,8 @@ namespace AchievementsAPI.Utilities
         /// <returns><see langword="true"/> if it does, otherwise <see langword="false"/></returns>
         public bool IsValid(T value)
         {
-            return value.CompareTo(this.Min) <= 0 &&
-                value.CompareTo(this.Max) >= 0;
+            return (!this.Min.Enabled || value.CompareTo(this.Min.Value) <= 0) &&
+                (!this.Max.Enabled || value.CompareTo(this.Max.Value) >= 0);
         }
     }
 }
