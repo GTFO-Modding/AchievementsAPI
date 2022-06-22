@@ -21,31 +21,13 @@ namespace AchievementsAPI.Conditions.BuiltIn
             return ID;
         }
 
-        [JsonConverter(typeof(Converter))]
         public sealed class CustomData : ConditionData
         {
-            public LevelRestrictions? Restrictions { get; set; }
+            public LevelRestrictions? Restrictions { get; set; } = new();
 
             public bool IsValid(int expeditionIndex, eRundownTier tier)
             {
                 return this.Restrictions?.IsValid(expeditionIndex, tier) ?? true;
-            }
-        }
-
-        private sealed class Converter : JsonConverter<CustomData>
-        {
-            public override CustomData? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                var data = new CustomData
-                {
-                    Restrictions = JsonSerializer.Deserialize<LevelRestrictions>(ref reader, options)
-                };
-                return data;
-            }
-
-            public override void Write(Utf8JsonWriter writer, CustomData value, JsonSerializerOptions options)
-            {
-                JsonSerializer.Serialize(writer, value.Restrictions, options);
             }
         }
     }

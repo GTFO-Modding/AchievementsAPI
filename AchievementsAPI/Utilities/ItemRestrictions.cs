@@ -1,6 +1,5 @@
 ﻿using GameData;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AchievementsAPI.Utilities
 {
@@ -56,11 +55,11 @@ namespace AchievementsAPI.Utilities
         {
             if (this.UseWhiteList)
             {
-                return EntryWithID(this.WhiteList, itemID);
+                return this.WhiteList?.HasEntryWithID<ItemDataBlock>(itemID) ?? false;
             }
             else
             {
-                return !EntryWithID(this.BlackList, itemID);
+                return !(this.BlackList?.HasEntryWithID<ItemDataBlock>(itemID) ?? false);
             }
         }
 
@@ -74,40 +73,12 @@ namespace AchievementsAPI.Utilities
         {
             if (this.UseWhiteList)
             {
-                return EntryWithName(this.WhiteList, itemDBName);
+                return this.WhiteList?.HasEntryWithName<ItemDataBlock>(itemDBName) ?? false;
             }
             else
             {
-                return !EntryWithName(this.BlackList, itemDBName);
+                return !(this.BlackList?.HasEntryWithName<ItemDataBlock>(itemDBName) ?? false);
             }
-        }
-
-        private static bool EntryWithName(List<DatablockReference?>? entries, string name)
-        {
-            return entries?.Any(r =>
-            {
-                ItemDataBlock? block = r?.GetBlock<ItemDataBlock>();
-                if (block == null)
-                {
-                    return false;
-                }
-
-                return block.name == name;
-            }) ?? false;
-        }
-
-        private static bool EntryWithID(List<DatablockReference?>? entries, uint id)
-        {
-            return entries?.Any(r =>
-            {
-                ItemDataBlock? block = r?.GetBlock<ItemDataBlock>();
-                if (block == null)
-                {
-                    return false;
-                }
-
-                return block.persistentID == id;
-            }) ?? false;
         }
     }
 }

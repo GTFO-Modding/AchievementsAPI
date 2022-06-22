@@ -361,5 +361,5 @@ AchievementManager.RegisterAchievementsListener += () =>
 ```
 
 
-#### Special Thanks
+## Special Thanks
 - Project Zaero for suggesting this idea.

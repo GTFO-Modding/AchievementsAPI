@@ -1,7 +1,6 @@
 ﻿using Enemies;
 using GameData;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AchievementsAPI.Utilities
 {
@@ -57,11 +56,11 @@ namespace AchievementsAPI.Utilities
         {
             if (this.UseWhiteList)
             {
-                return EntryWithID(this.WhiteList, enemyID);
+                return this.WhiteList?.HasEntryWithID<EnemyDataBlock>(enemyID) ?? false;
             }
             else
             {
-                return !EntryWithID(this.BlackList, enemyID);
+                return !(this.BlackList?.HasEntryWithID<EnemyDataBlock>(enemyID) ?? false);
             }
         }
 
@@ -75,40 +74,12 @@ namespace AchievementsAPI.Utilities
         {
             if (this.UseWhiteList)
             {
-                return EntryWithName(this.WhiteList, enemyDBName);
+                return this.WhiteList?.HasEntryWithName<EnemyDataBlock>(enemyDBName) ?? false;
             }
             else
             {
-                return !EntryWithName(this.BlackList, enemyDBName);
+                return !(this.BlackList?.HasEntryWithName<EnemyDataBlock>(enemyDBName) ?? false);
             }
-        }
-
-        private static bool EntryWithName(List<DatablockReference?>? entries, string name)
-        {
-            return entries?.Any(r =>
-            {
-                EnemyDataBlock? block = r?.GetBlock<EnemyDataBlock>();
-                if (block == null)
-                {
-                    return false;
-                }
-
-                return block.name == name;
-            }) ?? false;
-        }
-
-        private static bool EntryWithID(List<DatablockReference?>? entries, uint id)
-        {
-            return entries?.Any(r =>
-            {
-                EnemyDataBlock? block = r?.GetBlock<EnemyDataBlock>();
-                if (block == null)
-                {
-                    return false;
-                }
-
-                return block.persistentID == id;
-            }) ?? false;
         }
     }
 }

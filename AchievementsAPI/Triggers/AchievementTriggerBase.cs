@@ -17,7 +17,9 @@ namespace AchievementsAPI.Triggers
         public int Count { get; set; }
         /// <inheritdoc/>
         public ConditionOverrides ConditionOverrides { get; set; }
-        /// <inheritdoc/>
+        /// <summary>
+        /// The Data of this trigger.
+        /// </summary>
         public TData Data { get; set; }
 
         /// <summary>

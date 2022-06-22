@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace AchievementsAPI.Triggers.BuiltIn
 {
     [TriggerPatch(typeof(Patches))]
-    public class EnemyBiotrackedTrigger : AchievementTrigger<EnemyBiotrackedTrigger.CustomData>
+    public sealed class EnemyBiotrackedTrigger : AchievementTrigger<EnemyBiotrackedTrigger.CustomData>
     {
         public const string ID = "EnemyBiotracked";
 
@@ -30,17 +30,12 @@ namespace AchievementsAPI.Triggers.BuiltIn
             {
                 return false;
             }
-            return this.ValidateTrigger(wasMe, isUnique, enemy);
+            return this.Data.IsValid(wasMe, isUnique, enemy);
         }
 
         public override void Trigger(object?[] data, AchievementTriggerProgress progress)
         {
             progress.TriggerCount++;
-        }
-
-        public bool ValidateTrigger(bool wasMe, bool isUnique, EnemyAgent enemy)
-        {
-            return this.Data.IsValid(wasMe, isUnique, enemy);
         }
 
         public sealed class CustomData : TriggerData
