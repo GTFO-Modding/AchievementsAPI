@@ -1,14 +1,13 @@
-﻿using Enemies;
-using GameData;
+﻿using GameData;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AchievementsAPI.Utilities
 {
     /// <summary>
-    /// Restrictions for specific enemies.
+    /// Restrictions for specific items
     /// </summary>
-    public sealed class EnemyRestrictions
+    public sealed class ItemRestrictions
     {
         /// <summary>
         /// Whether or not to use the whitelist or blacklist.
@@ -24,62 +23,62 @@ namespace AchievementsAPI.Utilities
         public List<DatablockReference?>? BlackList { get; set; }
 
         /// <summary>
-        /// Returns whether or not the given enemy is valid by checking if it's in
-        /// the whitelist or blacklist with it's enemy data block.
+        /// Returns whether or not the given item is valid by checking if it's in
+        /// the whitelist or blacklist with it's item data block.
         /// </summary>
-        /// <param name="enemy">The enemy to check.</param>
-        /// <returns><see langword="true"/> if the enemy is valid, otherwise
+        /// <param name="item">The item to check.</param>
+        /// <returns><see langword="true"/> if the item is valid, otherwise
         /// <see langword="false"/></returns>
-        public bool IsValid(EnemyAgent enemy)
-            => this.IsValid(enemy.EnemyData);
+        public bool IsValid(Item item)
+            => this.IsValid(item.ItemDataBlock);
 
         /// <summary>
-        /// Returns whether or not the given enemy datablock is valid by checking if it's in
+        /// Returns whether or not the given item datablock is valid by checking if it's in
         /// the whitelist or blacklist.
         /// </summary>
-        /// <param name="enemyDB">The enemy DB to check.</param>
+        /// <param name="itemDB">The item DB to check.</param>
         /// <returns><see langword="true"/> if the enemy DB is valid, otherwise
         /// <see langword="false"/></returns>
-        public bool IsValid(EnemyDataBlock enemyDB)
+        public bool IsValid(ItemDataBlock itemDB)
         {
-            return this.IsValid(enemyDB.persistentID) ||
-                this.IsValid(enemyDB.name);
+            return this.IsValid(itemDB.persistentID) ||
+                this.IsValid(itemDB.name);
         }
 
         /// <summary>
-        /// Returns whether or not the given enemy ID is valid by checking if it's in
+        /// Returns whether or not the given item ID is valid by checking if it's in
         /// the whitelist or blacklist with it's enemy data id.
         /// </summary>
-        /// <param name="enemyID">The enemy ID to check.</param>
-        /// <returns><see langword="true"/> if the enemy ID is valid, otherwise
+        /// <param name="itemID">The item ID to check.</param>
+        /// <returns><see langword="true"/> if the item ID is valid, otherwise
         /// <see langword="false"/></returns>
-        public bool IsValid(uint enemyID)
+        public bool IsValid(uint itemID)
         {
             if (this.UseWhiteList)
             {
-                return EntryWithID(this.WhiteList, enemyID);
+                return EntryWithID(this.WhiteList, itemID);
             }
             else
             {
-                return !EntryWithID(this.BlackList, enemyID);
+                return !EntryWithID(this.BlackList, itemID);
             }
         }
 
         /// <summary>
-        /// Returns whether or not the given enemy datablock name is valid.
+        /// Returns whether or not the given item datablock name is valid.
         /// </summary>
-        /// <param name="enemyDBName">The enemy datablock name.</param>
-        /// <returns><see langword="true"/> if the enemy db name is valid, otherwise
+        /// <param name="itemDBName">The item datablock name.</param>
+        /// <returns><see langword="true"/> if the item db name is valid, otherwise
         /// <see langword="false"/></returns>
-        public bool IsValid(string enemyDBName)
+        public bool IsValid(string itemDBName)
         {
             if (this.UseWhiteList)
             {
-                return EntryWithName(this.WhiteList, enemyDBName);
+                return EntryWithName(this.WhiteList, itemDBName);
             }
             else
             {
-                return !EntryWithName(this.BlackList, enemyDBName);
+                return !EntryWithName(this.BlackList, itemDBName);
             }
         }
 
@@ -87,7 +86,7 @@ namespace AchievementsAPI.Utilities
         {
             return entries?.Any(r =>
             {
-                EnemyDataBlock? block = r?.GetBlock<EnemyDataBlock>();
+                ItemDataBlock? block = r?.GetBlock<ItemDataBlock>();
                 if (block == null)
                 {
                     return false;
@@ -101,7 +100,7 @@ namespace AchievementsAPI.Utilities
         {
             return entries?.Any(r =>
             {
-                EnemyDataBlock? block = r?.GetBlock<EnemyDataBlock>();
+                ItemDataBlock? block = r?.GetBlock<ItemDataBlock>();
                 if (block == null)
                 {
                     return false;
