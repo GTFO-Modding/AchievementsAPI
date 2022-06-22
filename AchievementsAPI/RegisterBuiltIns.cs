@@ -33,6 +33,7 @@ namespace AchievementsAPI
             RegisterTrigger<ExpeditionFailTrigger>();
             RegisterTrigger<ExpeditionSuccessTrigger>();
             RegisterTrigger<ReviveTrigger>();
+            RegisterTrigger<EnemyMineDamageTrigger>();
         }
     }
 }
