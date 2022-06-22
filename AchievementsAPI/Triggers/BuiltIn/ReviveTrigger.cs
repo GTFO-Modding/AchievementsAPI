@@ -5,7 +5,6 @@ using AchievementsAPI.Utilities;
 using Agents;
 using HarmonyLib;
 using Player;
-using System;
 
 namespace AchievementsAPI.Triggers.BuiltIn
 {
