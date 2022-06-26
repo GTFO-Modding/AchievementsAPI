@@ -21,7 +21,7 @@ Achievement information is stored in `/RundownFolder/Custom/AchievementAPI/`. Cu
 A custom way of defining achievements.
 
 Currently defined them as:
-```json
+```jsonc
 {
     "Achievements": [
         {
@@ -115,7 +115,7 @@ Currently defined them as:
 This format may change, but this is the current format as of now.
 
 For reference, here's an example json file for an achievement for tagging 5 scouts only on A1.
-```json
+```jsonc
 {
     "Achievements": [
         {
@@ -185,11 +185,16 @@ For reference, here's an example json file for an achievement for tagging 5 scou
 
 Please note: For conditions defined in `AdditionalConditions`, conditions defined in `Conditions`, and triggers defined in `Triggers`, please ensure the `ID` property comes first if you are using the list format. An error will occur if it's not first, due to the plugin not knowing how to handle the data associated with the Condition or Trigger.
 
+Documentation for specific elements for editing the json file can be found below:
+- [Built-In AchievementAPI](./AchievementsAPI/Docs/README.md)
+- [Extra Enemy Customization Expansion](./AchievementsAPI.Expansions.EEC/Docs/README.md)
+- [GTFuckingXP Expansion](./AchievementsAPI.Expansions.GTFuckingXP/Docs/README.md)
+
 #### achievement-progress.json
 Stores all progress relates to achievements.
 
 Currently looks like:
-```json
+```jsonc
 {
   "Achievements": [
     {
@@ -359,6 +364,9 @@ AchievementManager.RegisterAchievementsListener += () =>
     RegistryManager.Achievements.Register(myAchievement);
 };
 ```
+
+## Other Notes
+This solution contains a project called CheatDebug, which interfaces with a WIP Flaff.CheatMenuGUI.API. Due to it's developmental nature, it hasn't been included in this github repo, and instructions for setting it up can be found in [the project's readme](./AchievementsAPI.CheatDebug/README.md).
 
 
 ## Special Thanks

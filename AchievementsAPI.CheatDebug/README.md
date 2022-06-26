@@ -1,0 +1,2 @@
+﻿### Building Notice
+This project requires another plugin that must be downloaded from [thunderstore](https://gtfo.thunderstore.io/package/Panthr75/CheatMenuAPI/), and for the dll to be put inside a created `Libs` folder in this directory.

@@ -55,5 +55,13 @@ namespace AchievementsAPI.Triggers
         /// <returns><see langword="true"/> if this trigger can be triggered
         /// with <paramref name="data"/>, otherwise <see langword="false"/>.</returns>
         bool CanBeTriggered(object?[] data);
+
+        /// <summary>
+        /// Parameters for activating this trigger. Could be null if not implemented.
+        /// Is more of a utility. If implemented, should return an array of all
+        /// possible sequences of parameters that can be passed to successfully
+        /// activate this trigger.
+        /// </summary>
+        TriggerParameterList[]? TriggerParameters { get; }
     }
 }

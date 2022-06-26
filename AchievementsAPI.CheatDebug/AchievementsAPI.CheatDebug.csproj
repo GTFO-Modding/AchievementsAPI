@@ -1,11 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <Import Project="$(SolutionDir)/Dependencies.props" />
 
   <ItemGroup>
-    <Reference Include="$(PluginsFolder)\MTFO.dll" />
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>AchievementsAPI.CheatDebug</_Parameter1>
-    </AssemblyAttribute>
+    <Reference Include="$(SolutionDir)\AchievementsAPI.CheatDebug\Lib\*.dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AchievementsAPI\AchievementsAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cheats\Conditions\" />
+    <Folder Include="Cheats\Triggers\" />
+    <Folder Include="Menus\Conditions\" />
+    <Folder Include="Menus\Triggers\" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -13,7 +22,6 @@
     <LangVersion>latest</LangVersion>
     <CopyOnBuild>True</CopyOnBuild>
     <CopyOnBuildPath>$(GameFolder)\BepInEx\plugins</CopyOnBuildPath>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <TargetFramework>$(PluginFramework)</TargetFramework>
     <Platforms>x64</Platforms>
   </PropertyGroup>
@@ -21,14 +29,5 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(CopyOnBuild) == 'True'">
     <Exec Command="COPY &quot;$(TargetDir)$(TargetFileName)&quot; &quot;$(CopyOnBuildPath)\$(TargetFileName)&quot;" />
   </Target>
-    
-  <ItemGroup>
-    <None Include="$(SolutionDir)\AchievementsAPI\.editorconfig" />
-    <None Include="$(SolutionDir)\AchievementsAPI\Conditions\BuiltIn\.editorconfig" />
-    <None Include="$(SolutionDir)\AchievementsAPI\Triggers\BuiltIn\.editorconfig" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <Folder Include="Docs\Triggers\" />
-  </ItemGroup>
+
 </Project>

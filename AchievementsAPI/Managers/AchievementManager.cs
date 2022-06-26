@@ -79,6 +79,25 @@ namespace AchievementsAPI.Managers
             }
         }
 
+        /// <summary>
+        /// The current achievement points
+        /// </summary>
+        public static int AchievementPoints
+        {
+            get
+            {
+                int points = 0;
+                foreach (AchievementInstance achievement in s_achievements)
+                {
+                    if (achievement.Completed)
+                    {
+                        points += achievement.Definition.AchievementPoints;
+                    }
+                }
+                return points;
+            }
+        }
+
         private static readonly List<AchievementInstance> s_achievements = new();
 
         /// <summary>
@@ -191,6 +210,25 @@ namespace AchievementsAPI.Managers
             L.Warn($"Attempted to reset progress for achievement with id '{achievementID}', but no such achievement exists!");
         }
 
+        internal static void ForceCompleteAchievement(string achievementID)
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                if (instance.Definition.ID == achievementID)
+                {
+                    bool isCompleted = instance.Completed;
+                    instance.ForceComplete();
+                    if (!isCompleted)
+                    {
+                        InvokeOnAchievementUnlocked(instance.Definition);
+                    }
+                    return;
+                }
+            }
+
+            L.Warn($"Attempted to force complete achievement with id '{achievementID}', but no such achievement exists!");
+        }
+
         /// <summary>
         /// Resets all progress for all triggers with the given ID in the
         /// achievement with the given ID.
@@ -228,6 +266,47 @@ namespace AchievementsAPI.Managers
                 }
             }
             L.Warn($"Attempted to reset progress for trigger with id '{triggerID}' and increment {increment} in achievement with id '{achievementID}', but no such achievement exists!");
+        }
+
+        /// <summary>
+        /// Returns whether the achievement with the given ID is completed.
+        /// </summary>
+        /// <param name="id">The ID of the achievement.</param>
+        /// <returns><see langword="false"/> if the achievement wasn't completed, or no such
+        /// achievement with id <paramref name="id"/> exists, otherwise <see langword="true"/>.
+        /// </returns>
+        public static bool IsAchievementCompleted(string id)
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                if (instance.Definition.ID == id)
+                {
+                    return instance.Completed;
+                }
+            }
+            L.Warn($"Attempted to get completion status for achievement with id '{id}', but no such achievement exists!");
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the progress of the given achievement.
+        /// </summary>
+        /// <param name="id">The ID of the achievement.</param>
+        /// <returns>A value between 0 and 1 [inclusive], where 0 means 0% completed, and
+        /// 1 means 100% completed. If no such achievement with id <paramref name="id"/>
+        /// exists, this method returns <see cref="double.NaN"/>.
+        /// </returns>
+        public static double GetAchievementProgress(string id)
+        {
+            foreach (AchievementInstance instance in s_achievements)
+            {
+                if (instance.Definition.ID == id)
+                {
+                    return instance.GetProgress();
+                }
+            }
+            L.Warn($"Attempted to get the progress for achievement with id '{id}', but no such achievement exists!");
+            return double.NaN;
         }
 
         internal static void InvokeOnAchievementUnlocked(AchievementDefinition achievement)

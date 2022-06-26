@@ -20,6 +20,19 @@ namespace AchievementsAPI.Triggers.BuiltIn
             return ID;
         }
 
+        protected override TriggerParameterList[]? Parameters
+        {
+            get
+            {
+                return new TriggerParameterList[]
+                {
+                    new TriggerParameterList(
+                        new("enemyKilled", typeof(EnemyAgent)),
+                        new("playerWhoKilled", typeof(PlayerAgent)))
+                };
+            }
+        }
+
         private static bool TryGetTriggerData(object?[] data, [NotNullWhen(true)] out EnemyAgent? enemy, [NotNullWhen(true)] out PlayerAgent? player)
         {
             player = null;

@@ -35,6 +35,7 @@ namespace AchievementsAPI
             RegisterTrigger<ReviveTrigger>();
             RegisterTrigger<EnemyMineDamageTrigger>();
             RegisterTrigger<EnemyDeathTrigger>();
+            RegisterTrigger<ObjectiveCompleteTrigger>();
         }
     }
 }

@@ -14,6 +14,20 @@ namespace AchievementsAPI.Triggers.BuiltIn
     {
         public const string ID = "EnemyBiotracked";
 
+        protected override TriggerParameterList[]? Parameters
+        {
+            get
+            {
+                return new TriggerParameterList[]
+                {
+                    new TriggerParameterList(
+                        new("isLocalPlayer", typeof(bool)),
+                        new("isUnique", typeof(bool)),
+                        new("enemy", typeof(EnemyAgent)))
+                };
+            }
+        }
+
         public override string GetID() => ID;
 
         public override bool CanBeTriggered(object?[] data)

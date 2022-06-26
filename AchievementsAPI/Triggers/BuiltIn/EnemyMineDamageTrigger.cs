@@ -10,6 +10,7 @@ using Il2CppInterop.Runtime.Injection;
 using UnhollowerRuntimeLib;
 #endif
 using Player;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace AchievementsAPI.Triggers.BuiltIn
@@ -24,13 +25,41 @@ namespace AchievementsAPI.Triggers.BuiltIn
             return ID;
         }
 
-        public override bool CanBeTriggered(object?[] data)
+        protected override TriggerParameterList[]? Parameters
         {
-            if (data.Length == 0 || data[0] is not EnemyAgent enemy)
+            get
+            {
+                return new TriggerParameterList[]
+                {
+                    new TriggerParameterList(
+                        new("enemy", typeof(EnemyAgent)),
+                        new("damageToEnemy", typeof(float)))
+                };
+            }
+        }
+
+        private static bool TryGetTriggerData(object?[] data, [NotNullWhen(true)] out EnemyAgent? enemy, out float damage)
+        {
+            damage = default;
+            enemy = null;
+
+            if (data.Length == 0 || data[0] is not EnemyAgent e)
             {
                 return false;
             }
-            if (data.Length == 1 || data[1] is not float damage)
+            if (data.Length == 1 || data[1] is not float d)
+            {
+                return false;
+            }
+
+            enemy = e;
+            damage = d;
+            return true;
+        }
+
+        public override bool CanBeTriggered(object?[] data)
+        {
+            if (!TryGetTriggerData(data, out EnemyAgent? enemy, out float damage))
             {
                 return false;
             }

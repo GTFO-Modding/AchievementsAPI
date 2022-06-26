@@ -18,6 +18,18 @@ namespace AchievementsAPI.Triggers.BuiltIn
             return ID;
         }
 
+        protected override TriggerParameterList[]? Parameters
+        {
+            get
+            {
+                return new TriggerParameterList[]
+                {
+                    new TriggerParameterList(
+                        new TriggerParameterDefinition("revivedPlayer", typeof(PlayerAgent)))
+                };
+            }
+        }
+
         public override bool CanBeTriggered(object?[] data)
         {
             if (data.Length == 0 || data[0] is not PlayerAgent player)

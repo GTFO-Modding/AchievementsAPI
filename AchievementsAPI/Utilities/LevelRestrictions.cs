@@ -15,11 +15,11 @@ namespace AchievementsAPI.Utilities
         /// <summary>
         /// The levels that are valid.
         /// </summary>
-        public List<LevelInfo> WhiteListedLevels { get; set; } = new();
+        public List<LevelInfo> WhiteList { get; set; } = new();
         /// <summary>
         /// The levels that are invalid.
         /// </summary>
-        public List<LevelInfo> BlackListedLevels { get; set; } = new();
+        public List<LevelInfo> BlackList { get; set; } = new();
 
         /// <summary>
         /// Returns whether or not the given expedition index and tier correspond
@@ -33,12 +33,12 @@ namespace AchievementsAPI.Utilities
         {
             if (this.UseWhiteList)
             {
-                return this.WhiteListedLevels?.Any((level) =>
+                return this.WhiteList?.Any((level) =>
                     level.Tier == tier && level.ExpeditionIndex == expeditionIndex) ?? false;
             }
             else
             {
-                return !(this.BlackListedLevels?.Any((level) =>
+                return !(this.BlackList?.Any((level) =>
                     level.Tier == tier && level.ExpeditionIndex == expeditionIndex) ?? false);
             }
         }

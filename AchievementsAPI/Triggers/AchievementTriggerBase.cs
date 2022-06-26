@@ -34,6 +34,9 @@ namespace AchievementsAPI.Triggers
             this.ConditionOverrides = new();
         }
 
+        /// <inheritdoc cref="IAchievementTriggerBase.TriggerParameters"/>
+        protected virtual TriggerParameterList[]? Parameters => null; 
+
         /// <inheritdoc/>
         public void Setup()
         {
@@ -99,5 +102,6 @@ namespace AchievementsAPI.Triggers
                 }
             }
         }
+        TriggerParameterList[]? IAchievementTriggerBase.TriggerParameters => this.Parameters;
     }
 }

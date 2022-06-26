@@ -13,11 +13,11 @@ namespace AchievementsAPI.Utilities
         /// </summary>
         public bool UseWhiteList { get; set; }
         /// <summary>
-        /// Enemies allowed.
+        /// Items allowed.
         /// </summary>
         public List<DatablockReference?>? WhiteList { get; set; }
         /// <summary>
-        /// Enemies not allowed.
+        /// Items not allowed.
         /// </summary>
         public List<DatablockReference?>? BlackList { get; set; }
 
@@ -36,7 +36,7 @@ namespace AchievementsAPI.Utilities
         /// the whitelist or blacklist.
         /// </summary>
         /// <param name="itemDB">The item DB to check.</param>
-        /// <returns><see langword="true"/> if the enemy DB is valid, otherwise
+        /// <returns><see langword="true"/> if the item DB is valid, otherwise
         /// <see langword="false"/></returns>
         public bool IsValid(ItemDataBlock itemDB)
         {
@@ -46,7 +46,7 @@ namespace AchievementsAPI.Utilities
 
         /// <summary>
         /// Returns whether or not the given item ID is valid by checking if it's in
-        /// the whitelist or blacklist with it's enemy data id.
+        /// the whitelist or blacklist with it's persistent id.
         /// </summary>
         /// <param name="itemID">The item ID to check.</param>
         /// <returns><see langword="true"/> if the item ID is valid, otherwise

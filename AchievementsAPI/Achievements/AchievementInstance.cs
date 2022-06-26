@@ -102,6 +102,38 @@ namespace AchievementsAPI.Achievements
             }
         }
 
+        internal double GetProgress()
+        {
+            int triggers = 0;
+            int totalTriggers = 0;
+
+            foreach (AchievementProgress.TriggerInfo trigger in this.Progress.Triggers)
+            {
+                triggers += trigger.Progress.TriggerCount;
+                totalTriggers += this.Definition.Triggers.GetValues(trigger.ID)[(int)trigger.Increment].Count;
+            }
+
+            if (totalTriggers == 0)
+            {
+                return 1.0;
+            }
+            else
+            {
+                return (double)triggers / totalTriggers;
+            }
+        }
+
+        internal void ForceComplete()
+        {
+            foreach (AchievementProgress.TriggerInfo trigger in this.Progress.Triggers)
+            {
+                IAchievementTriggerProgress progress = trigger.Progress;
+                progress.TriggerCount = this.Definition.Triggers.GetValues(trigger.ID)[(int)trigger.Increment].Count;
+                trigger.Progress = progress;
+            }
+            AchievementManager.SaveProgress();
+        }
+
         private void DoResetProgress(string id, uint increment, ref bool save)
         {
             IAchievementTriggerBase[] triggers = this.Definition.Triggers.GetValues(id);
