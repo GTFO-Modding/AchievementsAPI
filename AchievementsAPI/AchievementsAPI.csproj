@@ -3,6 +3,7 @@
 
   <ItemGroup>
     <Reference Include="$(PluginsFolder)\MTFO.dll" />
+    <Reference Include="$(SolutionDir)\Lib\Flaff.Collections.Registries.dll" />
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>AchievementsAPI.CheatDebug</_Parameter1>
     </AssemblyAttribute>

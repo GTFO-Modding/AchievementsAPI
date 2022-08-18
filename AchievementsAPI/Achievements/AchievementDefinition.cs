@@ -1,6 +1,6 @@
 ﻿using AchievementsAPI.Conditions.Registries;
-using AchievementsAPI.Registries;
 using AchievementsAPI.Triggers.Registries;
+using Flaff.Collections.Registries;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;

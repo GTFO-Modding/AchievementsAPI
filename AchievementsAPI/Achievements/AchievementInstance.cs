@@ -2,10 +2,10 @@
 using AchievementsAPI.Conditions.Extensions;
 using AchievementsAPI.Managers;
 using AchievementsAPI.Progress;
-using AchievementsAPI.Registries;
 using AchievementsAPI.Triggers;
 using AchievementsAPI.Triggers.Extensions;
 using AchievementsAPI.Utilities;
+using Flaff.Collections.Registries;
 using System.Collections.Generic;
 
 namespace AchievementsAPI.Achievements

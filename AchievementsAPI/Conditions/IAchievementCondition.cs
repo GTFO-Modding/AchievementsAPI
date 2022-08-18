@@ -1,5 +1,5 @@
-﻿using AchievementsAPI.Registries;
-using AchievementsAPI.Triggers;
+﻿using AchievementsAPI.Triggers;
+using Flaff.Collections.Registries;
 using System;
 
 namespace AchievementsAPI.Conditions

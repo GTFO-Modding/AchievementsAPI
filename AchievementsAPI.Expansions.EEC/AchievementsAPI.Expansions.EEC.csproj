@@ -5,6 +5,7 @@
   <ItemGroup>
     <Reference Include="$(SolutionDir)\AchievementsAPI.Expansions.EEC\Lib\*.dll" Private="false" />
     <Reference Include="$(PluginsFolder)\GTFO-API.dll" />
+    <Reference Include="$(SolutionDir)\Lib\Flaff.Collections.Registries.dll" />
   </ItemGroup>
 
   <ItemGroup>

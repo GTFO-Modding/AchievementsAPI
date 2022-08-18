@@ -3,6 +3,7 @@ using AchievementsAPI.Managers;
 using AchievementsAPI.Triggers;
 using AchievementsAPI.Triggers.Registries;
 using AchievementsAPI.Utilities;
+using Flaff.Collections.Registries.JsonConverters;
 using System.Text.Json;
 
 namespace AchievementsAPI.Converters
@@ -10,7 +11,7 @@ namespace AchievementsAPI.Converters
     /// <summary>
     /// A json converter for handling <see cref="AchievementTriggerList"/>.
     /// </summary>
-    public class AchievementTriggerListConverter : InternalRegistryListConverter<AchievementTriggerList, IAchievementTriggerBase>
+    public class AchievementTriggerListConverter : RegistryListConverterBase<AchievementTriggerList, IAchievementTriggerBase>
     {
         /// <inheritdoc/>
         protected override void FillElement(IAchievementTriggerBase element, ref Utf8JsonReader reader, JsonSerializerOptions options)

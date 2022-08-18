@@ -1,5 +1,5 @@
 ﻿using AchievementsAPI.Converters;
-using AchievementsAPI.Registries;
+using Flaff.Collections.Registries;
 using System.Text.Json.Serialization;
 
 namespace AchievementsAPI.Triggers.Registries

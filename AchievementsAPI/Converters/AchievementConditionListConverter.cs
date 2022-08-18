@@ -2,6 +2,7 @@
 using AchievementsAPI.Conditions.Registries;
 using AchievementsAPI.Managers;
 using AchievementsAPI.Utilities;
+using Flaff.Collections.Registries.JsonConverters;
 using System.Text.Json;
 
 namespace AchievementsAPI.Converters
@@ -9,7 +10,7 @@ namespace AchievementsAPI.Converters
     /// <summary>
     /// A JsonConverter for Achievement Condition Lists.
     /// </summary>
-    public class AchievementConditionListConverter : InternalRegistryListConverter<AchievementConditionList, IAchievementCondition>
+    public class AchievementConditionListConverter : RegistryListConverterBase<AchievementConditionList, IAchievementCondition>
     {
         /// <inheritdoc/>
         protected override void FillElement(IAchievementCondition element, ref Utf8JsonReader reader, JsonSerializerOptions options)

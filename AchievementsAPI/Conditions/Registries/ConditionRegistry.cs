@@ -1,4 +1,4 @@
-﻿using AchievementsAPI.Registries;
+﻿using Flaff.Collections.Registries;
 
 namespace AchievementsAPI.Conditions.Registries
 {

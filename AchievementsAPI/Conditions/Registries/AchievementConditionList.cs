@@ -1,6 +1,6 @@
 ﻿using AchievementsAPI.Converters;
-using AchievementsAPI.Registries;
 using System.Text.Json.Serialization;
+using Flaff.Collections.Registries;
 
 namespace AchievementsAPI.Conditions.Registries
 {
