@@ -5,7 +5,7 @@ using AchievementsAPI.Triggers.Attributes;
 using AchievementsAPI.Triggers.Registries;
 using AchievementsAPI.Utilities;
 using BepInEx;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using BepInEx.Logging;
 using GameData;
 using HarmonyLib;

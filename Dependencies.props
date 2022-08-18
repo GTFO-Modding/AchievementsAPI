@@ -23,7 +23,7 @@
     
     <!-- CoreCLR Compatibility -->
     <PropertyGroup Condition="Exists('$(GameFolder)\dotnet') or !Exists('$(GameFolder)\mono')">
-        <MonoLibsFolder>$(GameFolder)\dotnet\corlib</MonoLibsFolder>
+        <MonoLibsFolder>$(GameFolder)\dotnet</MonoLibsFolder>
         <PluginRuntime>coreclr</PluginRuntime>
         <PluginFramework>net6.0</PluginFramework>
     </PropertyGroup>
@@ -71,9 +71,10 @@
     
     <!--+ Util Assemblies -->
     <ItemGroup>
-        <Reference Include="$(MonoLibsFolder)\*.dll" Private="false" />
-        <Reference Remove="$(MonoLibsFolder)\msquic.dll" />
+        <Reference Include="$(MonoLibsFolder)\System.*.dll" Private="false" />
+        <Reference Include="$(MonoLibsFolder)\netstandard.dll" Private="false" />
+        <Reference Include="$(MonoLibsFolder)\mscorlib.dll" Private="false" />
         <Reference Remove="$(MonoLibsFolder)\System.IO.Compression.Native.dll" />
-        <Reference Condition="'$(PluginRuntime)' == 'coreclr'" Include="$(MonoLibsFolder)\..\System.Private.CoreLib.dll" Private="false" />
+        <Reference Condition="'$(PluginRuntime)' == 'coreclr'" Include="$(MonoLibsFolder)\System.Private.CoreLib.dll" Private="false" />
     </ItemGroup>
 </Project>
