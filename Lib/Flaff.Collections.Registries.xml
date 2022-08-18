@@ -122,6 +122,23 @@
             </summary>
             <returns>The ID of this registerable item.</returns>
         </member>
+        <member name="T:Flaff.Collections.Registries.IRegisterListener">
+            <summary>
+            An extension for <see cref="T:Flaff.Collections.Registries.IRegisterable"/> to allow for listening
+            for when the item is registered.
+            </summary>
+        </member>
+        <member name="M:Flaff.Collections.Registries.IRegisterListener.OnRegister">
+            <summary>
+            Called when this item is registered.
+            </summary>
+        </member>
+        <member name="M:Flaff.Collections.Registries.IRegisterListener.OnRegisterFail(System.String)">
+            <summary>
+            Called when this item fails to register.
+            </summary>
+            <param name="failReason">The reason the registry failed.</param>
+        </member>
         <member name="T:Flaff.Collections.Registries.IRegistry">
             <summary>
             Representation of a registry.
@@ -373,6 +390,17 @@
             <param name="list">The list instance.</param>
             <param name="id">The ID.</param>
             <returns>all values associated with the specified id.</returns>
+        </member>
+        <member name="T:Flaff.Collections.Registries.IUnregisterListener">
+            <summary>
+            An extension for <see cref="T:Flaff.Collections.Registries.IRegisterable"/> to allow for listening
+            for when the item is registered.
+            </summary>
+        </member>
+        <member name="M:Flaff.Collections.Registries.IUnregisterListener.OnUnregister">
+            <summary>
+            Called when this item is unregistered
+            </summary>
         </member>
         <member name="T:Flaff.Collections.Registries.JsonConverters.RegistryListConverterBase`2">
             <summary>
